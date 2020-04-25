@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.3/vue.js"></script>
+<script src="https://unpkg.com/delaunay-fast@1"></script>
+<script src="https://unpkg.com/abo-utils@0.3"></script>
+<script src="https://unpkg.com/drag-tracker@1"></script>
+
+
+
+<svg width="0" height="0" style="position:absolute;">
+    <defs>
+        <radialGradient id="point-grad">
+            <stop offset="80%" stop-color="transparent"/>
+            <stop offset="81%" stop-color="white"/>
+        </radialGradient>
+    </defs>
+</svg>
+
+<section id="app">
+    <div id="prepare" class="group">
+        
+<button @click="clear">Clear</button>
+        <div id="image1" class="image-container">
+            <div class="draw-area" :style="sizer()">
+                <canvas class="img"></canvas>
+                <triangulator :model="state.tri1" :selected-index="state.selectedIndex"
+                              @added="onAdded" @selected="onSelected" @deleted="onDeleted"></triangulator>
+            </div>
+            <label>
+                <input type="file" accept="image/*">
+                <span>Change image</span>
+            </label>
+        </div>
+        <div id="image2" class="image-container">
+            <div class="draw-area" :style="sizer()">
+                <canvas class="img"></canvas>
+                <triangulator :model="state.tri2" :selected-index="state.selectedIndex"
+                              @added="onAdded" @selected="onSelected" @deleted="onDeleted"></triangulator>
+            </div>
+            <label>
+                <input type="file" accept="image/*">
+                <span>Change image</span>
+            </label>
+        </div>
+    </div>
+<br>
+    <div id="apply" class="group">
+        <button @click="warp">Morph</button>
+        <div id="morph">
+            <canvas id="c1" :width="state.size.w" :height="state.size.h"></canvas>
+            <canvas id="c2" :width="state.size.w" :height="state.size.h"></canvas>
+        </div>
+    </div>
+
+    <!---->
+   
+</section>
+
+
+<!-- SVG UI -->
+<script>
+    Vue.component('drag-node', {
+        template: '<circle data-draggable @dragging="onDragging" :cx="absCoord[0]" :cy="absCoord[1]" :r="r" />',
+        props: {
+            r: { default: 16 },
+            coord: Array,
+            //If 'coord' is relative to some other point:
+            offsetCenter: Array,
+        },
+        model: {
+            prop: 'coord',
+            event: 'do_it',
+        },
+        computed: {
+            absCoord() {
+                const point = this.coord,
+                      center = this.offsetCenter,
+                      absCoord = center ? [ point[0] + center[0], point[1] + center[1] ]
+                                        : point;
+                return absCoord;
+            },
+        },
+        methods: {
+            onDragging(e) {
+                const point = e.detail.pos,
+                      center = this.offsetCenter,
+                      relCoord = center ? [ point[0] - center[0], point[1] - center[1] ]
+                                        : point;
+                this.$emit('do_it', relCoord);
+            },
+        },
+    });
+
+    Vue.component('connector', {
+        template: '<line class="connector" :x1="start[0]" :y1="start[1]" :x2="absEnd[0]" :y2="absEnd[1]" />',
+        props: ['start', 'end', 'endIsRel'],
+        computed: {
+            absEnd() {
+                const start = this.start,
+                      end = this.end,
+                      absEnd = this.endIsRel ? [ start[0] + end[0], start[1] + end[1] ]
+                                             : end;
+                return absEnd;
+            }
+        }
+    });
+</script>
+<script type="text/javascript" src="myscript.js"></script>
+</body>
+</html>

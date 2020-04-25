@@ -1,0 +1,138 @@
+body {
+    margin: 0;
+    font-family: Georgia, sans-serif;
+}
+
+body h1 {
+    margin: 0;
+    padding: 1em 0;
+    text-align: center;
+    background: steelblue;
+    color: lightcyan;
+    text-shadow: 0.2em 0.2em 0 rgba(0, 0, 0, 0.2);
+}
+
+body button {
+    padding: 1em;
+    font: inherit;
+    cursor: pointer;
+}
+
+body footer {
+    padding: 2em 1em;
+    background: orangered;
+    color: lightgoldenrodyellow;
+}
+
+body footer a {
+    color: gold;
+}
+
+#app {
+    text-align: center;
+    padding: .5em 0;
+    background: aliceblue;
+}
+
+#app .group {
+    display: inline-block;
+    vertical-align: top;
+    margin: .5em .8em;
+}
+
+#app .group button {
+    display: block;
+    margin: auto;
+    margin-bottom: .5em;
+}
+
+#app .image-container {
+    position: relative;
+    display: inline-block;
+    background: white;
+}
+
+#app .image-container .draw-area {
+    text-align: left;
+    overflow: hidden;
+}
+
+#app .image-container input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    width: 0;
+}
+
+#app .image-container input + span {
+    position: relative;
+    display: block;
+    padding: .5em;
+    box-sizing: border-box;
+    background: red;
+    color: white;
+    cursor: pointer;
+}
+
+#app .image-container input:focus + span,
+      #app .image-container input:active + span,
+      #app .image-container input + span:hover {
+    background: #e62429;
+    outline: 2px solid black;
+}
+
+#app #morph {
+    position: relative;
+    display: table;
+}
+
+#app #morph canvas {
+    background: white;
+}
+
+#app #morph canvas + canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#app .image-container, #app #morph {
+    box-shadow: 0 0  0 1px paleturquoise;
+}
+
+#app svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#app svg .connector {
+    stroke: rgba(30, 144, 255, 0.5);
+    stroke-width: 1;
+    stroke-dasharray: 2;
+    pointer-events: none;
+}
+
+#app svg [data-draggable] {
+    stroke: black;
+    fill: rgba(255, 255, 255, 0.2);
+    fill: url(#point-grad);
+    cursor: move;
+}
+
+#app svg [data-draggable].selected {
+    fill: rgba(255, 255, 0, 0.5);
+}
+
+#app pre {
+    flex: 1 1 auto;
+    margin: .5em 1em;
+    background: white;
+    color: #888;
+    border: 1px solid gainsboro;
+    overflow: auto;
+}
+#app{
+    width: 100%;
+    height: 100%;
+}
